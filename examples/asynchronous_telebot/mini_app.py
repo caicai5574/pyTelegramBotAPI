@@ -1,33 +1,27 @@
-# The source of the "https://pytelegrambotminiapp.vercel.app" can be found in https://github.com/eternnoir/pyTelegramBotAPI/tree/master/examples/mini_app_web
+import telebot
 
-import asyncio
-from telebot.async_telebot import AsyncTeleBot 
-from telebot.types import (
-    ReplyKeyboardMarkup, 
-    KeyboardButton, 
-    WebAppInfo,
-    InlineKeyboardMarkup,
-    InlineKeyboardButton
-)
+API_TOKEN = '7583741383:AAGf1J5Y4ja5tUxQsfvmQUpR07D1gJ1rz6M'
 
-BOT_TOKEN = "" 
-WEB_URL = "https://pytelegrambotminiapp.vercel.app"
+bot = telebot.TeleBot(API_TOKEN)
 
-bot = AsyncTeleBot(BOT_TOKEN)
 
-@bot.message_handler(commands=["start"])
-async def start(message):
-    reply_keyboard_markup = ReplyKeyboardMarkup(resize_keyboard=True)
-    reply_keyboard_markup.row(KeyboardButton("Start MiniApp", web_app=WebAppInfo(WEB_URL)))
+@bot.message_handler(commands=['start'])#/start
+def start(message):
+    bot.reply_to(message, '{username}您好！👻我是嘉宝机器人🦋')
 
-    inline_keyboard_markup = InlineKeyboardMarkup()
-    inline_keyboard_markup.row(InlineKeyboardButton('Start MiniApp', web_app=WebAppInfo(WEB_URL)))
+@bot.message_handler(commands=['start'])#/start
+def start(message):
+    bot.reply_to(message, '{username}您好！👻我是嘉宝机器人🦋')
+    
+@bot.message_handler(commands=['帮助'])#/帮助
+def 帮助(message):
+    bot.reply_to(message, '我能帮上什么忙？')
 
-    await bot.reply_to(message, "Click the bottom inline button to start MiniApp", reply_markup=inline_keyboard_markup)
-    await bot.reply_to(message, "Click keyboard button to start MiniApp", reply_markup=reply_keyboard_markup)
+# Handle all other messages with content_type 'text' (content_types defaults to ['text'])
+@bot.message_handler(func=lambda message: True)
+def Super(message):
+    if message =='Super':
+        print('Super info')
 
-@bot.message_handler(content_types=['web_app_data'])
-async def web_app(message):
-    await bot.reply_to(message, f'Your message is "{message.web_app_data.data}"')
 
-asyncio.run(bot.polling())
+bot.infinity_polling()
